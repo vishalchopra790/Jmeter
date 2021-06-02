@@ -1,0 +1,109 @@
+using Microsoft.Office.Interop.Excel;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
+using Excel = Microsoft.Office.Interop.Excel;
+
+
+namespace FirstStrike.QA.Portal.FunctionalTests.Hooks
+{
+    class UtilExcel
+    {
+        string Path;
+        Excel.Application xlApp;
+        Workbook wb;
+        Worksheet ws;
+
+        
+
+
+        public UtilExcel(string Path, string Sheet)
+        {
+            this.Path = Path;
+            xlApp = new Excel.Application();
+            wb = xlApp.Workbooks.Open(Path);
+            ws = wb.Worksheets[Sheet] as Excel.Worksheet;
+            xlApp.DisplayAlerts = false;
+
+        }
+
+
+       public void OpenExcel()
+        {
+            xlApp = new Excel.Application();
+            wb = xlApp.Workbooks.Open(Path);
+            ws = wb.Worksheets[Sheet] as Excel.Worksheet;
+            xlApp.DisplayAlerts = false;
+
+        }
+
+        public string ReadData(int Row, int Col)
+        {
+           
+            string  value = Convert.ToString((ws.Cells[Row, Col] as Excel.Range).Value2);
+            
+            if  (value!= null)
+            {
+                return Convert.ToString((ws.Cells[Row, Col] as Excel.Range).Value2);
+            }
+            else
+            {
+                return "";
+            }
+            
+        }
+
+
+
+
+        public void Writedata(int Row, int Col, string data)
+        {
+            (ws.Cells[Row, Col] as Excel.Range).Value2 = data;
+        }
+        public void SaveWorkbook()
+        {
+            wb.Save();
+        }
+
+        public void SaveASWorkbook(string NewPath)
+        {
+           // xlApp.DisplayAlerts = false;
+            wb.SaveAs(Path, Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookDefault, Type.Missing, Type.Missing, false, false, XlSaveAsAccessMode.xlNoChange, XlSaveConflictResolution.xlLocalSessionChanges, Type.Missing, Type.Missing);
+        }
+
+        public void CloseWorkbook()
+        {
+            wb.Close();
+            Marshal.FinalReleaseComObject(wb);
+            wb = null;
+            xlApp.Quit();
+            Marshal.FinalReleaseComObject(xlApp);
+            xlApp = null;
+            
+
+        }
+
+        public int ReturntotalRows()
+        {
+            return ws.UsedRange.Rows.Count;
+        }
+
+        public int ReturntotalCols()
+        {
+            return ws.UsedRange.Columns.Count;
+
+        }
+
+
+    }
+
+
+   
+}
+
+
+

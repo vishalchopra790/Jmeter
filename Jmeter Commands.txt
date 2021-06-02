@@ -1,0 +1,6 @@
+Commands for Running TestCases from cmd 
+-------------------------------------------------
+-n for non gui
+-t for test plan
+-l result
+jmeter -n -t D:\Vishal\Jmeter\CookieManager.jmx -l D:\Vishal\Jmeter\result.jtl
